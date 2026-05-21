@@ -1,11 +1,11 @@
-package handlers
+package service
 
 import (
 	"errors"
 	"net/http"
 	"strings"
 
-	"main/database/crud"
+	"main/internal/crud"
 	"gorm.io/gorm"
 )
 

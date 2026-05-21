@@ -4,7 +4,7 @@ import (
 	"log"
 	"net/http"
 
-	"main/middleware/handlers"
+	"main/internal/service"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -17,7 +17,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	h := &handlers.Handler{DB: db}
+	h := &service.Handler{DB: db}
 	http.Handle("/departments", h)
 	http.Handle("/departments/", h)
 

@@ -5,7 +5,7 @@ import (
 	"errors"
 	"time"
 
-	dbmodel "main/database/models"
+	dbmodel "main/internal/models"
 	"gorm.io/gorm"
 )
 
