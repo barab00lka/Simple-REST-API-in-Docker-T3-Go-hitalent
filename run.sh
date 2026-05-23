@@ -17,5 +17,5 @@ fi
 docker compose up -d
 
 if [ "$WITH_TESTS" = true ]; then
-	docker exec t3-go_server_1 go test -v ./... 
+	sleep 2 && docker exec t3-go_server_1 go test -v ./...  ## sleep because we wait for container to be started
 fi
