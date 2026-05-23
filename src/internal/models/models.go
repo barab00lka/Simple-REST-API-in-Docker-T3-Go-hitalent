@@ -10,8 +10,8 @@ type Department struct {
     Name      string       `json:"name" gorm:"column:name;type:varchar(200);not null;check:name != ''"`
     ParentID  *int         `json:"parent_id,omitempty" gorm:"column:parent_id;index:idx_departments_parent_id"`
     CreatedAt time.Time    `json:"created_at" gorm:"column:created_at;autoCreateTime"`
-    Children  []Department `json:"children,omitempty" gorm:"-"`           // не хранится в БД, только для ответов
-    Employees []Employee   `json:"employees,omitempty" gorm:"foreignKey:DepartmentID"` // для Preload
+    Children  []Department `json:"children,omitempty" gorm:"-"`
+    Employees []Employee   `json:"employees,omitempty" gorm:"foreignKey:DepartmentID"`
 }
 
 func (Department) TableName() string {
@@ -30,20 +30,3 @@ type Employee struct {
 func (Employee) TableName() string {
     return "employees"
 }
-// type Department struct {
-// 	ID        int       `gorm:"primaryKey"`
-// 	Name      string    `gorm:"type:varchar(200);not null"`
-// 	ParentID  *int      `gorm:"index"`
-// 	CreatedAt time.Time `gorm:"autoCreateTime"`
-// }
-
-// type Employee struct {
-// 	ID           int        `gorm:"primaryKey"`
-// 	DepartmentID int        `gorm:"not null;index"`
-// 	FullName     string     `gorm:"type:varchar(200);not null"`
-// 	Position     string     `gorm:"type:varchar(200);not null"`
-// 	HiredAt      *time.Time `gorm:"type:date"`      // внимание. тут должна быть просто дата в формате YY-MM-DD
-// 	CreatedAt    time.Time  `gorm:"autoCreateTime"` // а тут и везде в остальных time должен быть полный timestamp
-// }
-
-
