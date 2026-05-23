@@ -1,13 +1,14 @@
+volumes:
+  pgdata:
+
 services:
   db:
-    image: postgres:latest
-    container_name: postgres_container
-    environment:
-     - POSTGRES_USER=postgres_user
-     - POSTGRES_PASSWORD=t3-go
-     - POSTGRES_DB=postgres_db
-    ports:
-     - "127.0.0.1:5432:5432"
+    image: docker.io/library/postgres:alpine
+    container_name: postgres
+    env_file:
+      - .env
+    volumes:
+      - pgdata:/var/lib/postgresql/data/pgdata
     deploy:
       resources:
         limits:
@@ -16,41 +17,15 @@ services:
         reservations:
           cpus: '0.25'
           memory: 256M
+    shm_size: 128mb
     restart: unless-stopped
-    tty: true
-    stdin_open: true
 
-  pgadmin:
-    image: dpage/pgadmin4
-    container_name: pgadmin_web
+  server:
+    image: localhost/t3-app-go
+    env_file:
+      - .env
+    depends_on:
+      - db
     ports:
-      - 8082:80
-    environment:
-      - PGADMIN_DEFAULT_EMAIL=postgres@example.com
-      - PGADMIN_DEFAULT_PASSWORD=postgres
-      - PGADMIN_CONFIG_SERVER_MODE=False
-      - PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED=False
-      - PGADMIN_DISABLE_POSTFIX=True
-    entrypoint: /bin/sh -c "chmod 600 /var/lib/pgadmin/storage/pgpass; /entrypoint.sh;"
-    user: root
-    configs:
-      - source: servers.json
-        target: /pgadmin4/servers.json
-      - source: pgpass
-        target: /var/lib/pgadmin/storage/pgpass
-
-configs:
-  pgpass:
-    content: postgres_container:5432:*:postgres_user:t3-go
-  servers.json:
-    content: |
-      {"Servers": {"1": {
-        "Group": "Servers",
-        "Name": "My Local Postgres",
-        "Host": "postgres_container",
-        "Port": 5432,
-        "MaintenanceDB": "postgres",
-        "Username": "postgres_user",
-        "PassFile": "/var/lib/pgadmin/storage/pgpass",
-        "SSLMode": "prefer"
-      }}}
+      - "8080:80"
+    restart: unless-stopped

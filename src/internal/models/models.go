@@ -6,7 +6,7 @@ import (
 
 
 type Department struct {
-    ID        int          `json:"id" gorm:"primaryKey"`
+    ID        int          `json:"id" gorm:"primaryKey;autoIncrement"`
     Name      string       `json:"name" gorm:"column:name;type:varchar(200);not null;check:name != ''"`
     ParentID  *int         `json:"parent_id,omitempty" gorm:"column:parent_id;index:idx_departments_parent_id"`
     CreatedAt time.Time    `json:"created_at" gorm:"column:created_at;autoCreateTime"`
@@ -19,7 +19,7 @@ func (Department) TableName() string {
 }
 
 type Employee struct {
-    ID           int        `json:"id" gorm:"primaryKey"`
+    ID           int        `json:"id" gorm:"primaryKey;autoIncrement"`
     DepartmentID int        `json:"department_id,omitempty" gorm:"column:department_id;not null;index:idx_employee_department"`
     FullName     string     `json:"full_name" gorm:"column:full_name;type:varchar(200);not null;check:full_name != ''"`
     Position     string     `json:"position" gorm:"column:position;type:varchar(200);not null;check:position != ''"`
