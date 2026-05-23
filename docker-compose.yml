@@ -22,6 +22,7 @@ services:
 
   server:
     image: localhost/t3-app-go
+    container_name: t3-server
     env_file:
       - .env
     depends_on:
